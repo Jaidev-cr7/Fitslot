@@ -1,9 +1,17 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const API_URL = import.meta.env.VITE_API_URL
+
+if (!API_URL) {
+  console.warn(
+    '[FitSlot] VITE_API_URL is not set! ' +
+    'Falling back to http://localhost:5000/api. ' +
+    'Set VITE_API_URL in your .env file or Vercel dashboard.'
+  )
+}
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: API_URL || 'http://localhost:5000/api',
   headers: { 'Content-Type': 'application/json' },
   timeout: 10000,
 })
