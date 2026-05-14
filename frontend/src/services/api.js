@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL
+let API_URL = import.meta.env.VITE_API_URL
 
 if (!API_URL) {
   console.warn(
@@ -8,10 +8,16 @@ if (!API_URL) {
     'Falling back to http://localhost:5000/api. ' +
     'Set VITE_API_URL in your .env file or Vercel dashboard.'
   )
+  API_URL = 'http://localhost:5000/api'
+} else {
+  // Ensure the URL ends with /api in case it was set incorrectly in Vercel
+  if (!API_URL.endsWith('/api') && !API_URL.endsWith('/api/')) {
+    API_URL = `${API_URL.replace(/\/$/, '')}/api`
+  }
 }
 
 const api = axios.create({
-  baseURL: API_URL || 'http://localhost:5000/api',
+  baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 10000,
 })
